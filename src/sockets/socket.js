@@ -5,7 +5,7 @@ const { addUser, getOnlineUsers, removeUser } = require('../sockets/utils/usersC
 const socket = (server) =>{
     const io = socketio(server,{
         cors: {
-          origin: "https://checkers-app-27e55.web.app",
+          origin: process.env.CLIENT_URL,
           methods: ["GET", "POST"],
           allowedHeaders: ["username"],
           credentials: true
