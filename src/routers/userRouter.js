@@ -36,15 +36,43 @@ router.post('/users/logout',auth, async (req,res)=>{
     }
 }) 
 
-router.get('/users', auth, async (req,res)=>{
+// router.get('/users', auth, async (req,res)=>{
+//     try {
+//         const users = await User.find({ _id: { $ne: req.query.id}})
+//         if (!users) {
+//             return res.status(400).send({error: 'couldnt find'})
+//         }
+//         res.send(users)
+//     } catch (err) {
+//         res.status(400).send({error: 'bad request'})
+//     }
+// })
+
+router.patch('/game-points', auth, async (req,res) =>{
     try {
-        const users = await User.find({ _id: { $ne: req.query.id}})
-        if (!users) {
-            return res.status(400).send({error: 'couldnt find'})
+        if (req.user.score) {
+            req.user.score+=req.body.score
+        } else {
+            req.user.score = req.body.score
         }
-        res.send(users)
-    } catch (err) {
-        res.status(400).send({error: 'bad request'})
+        await req.user.save()
+        res.send()
+    } catch(err) {
+        res.status(400).send({error:err.message})
+    }
+})
+
+router.get('/game-points', auth, async (req,res)=>{
+    try {
+        let players = await User.find({})
+        players = players.map((player)=>({
+            id:player._id,
+            username:player.username,
+            score:player.score?player.score:0
+        }))
+        res.send(players)
+    } catch(err) {
+        res.status(400).send({error:'bad request'})
     }
 })
 

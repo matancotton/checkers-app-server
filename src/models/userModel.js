@@ -44,18 +44,14 @@ const userSchema = new mongoose.Schema(
             min: 12,
             required: true
         },
-        avatar: {
-            type: Buffer
+        score: {
+            type: Number,
+            default: 0
         },
         tokens: [{ 
             token:{
             type: String,
-            required: true,
-            createdAt: {
-                type: Date,
-                expires: '3600s',
-                default: Date.now
-            }
+            required: true
         }
             
         }]
